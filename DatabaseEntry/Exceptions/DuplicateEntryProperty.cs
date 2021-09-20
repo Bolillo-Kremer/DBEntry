@@ -19,16 +19,16 @@ namespace DatabaseEntry.Exceptions
         /// <summary>
         /// Creates new <see cref="EntryDoesNotExist"/>
         /// </summary>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        public EntryDoesNotExist(string Message): base(Message)
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        public EntryDoesNotExist(string aMessage): base(aMessage)
         { }
 
         /// <summary>
         /// Creates new <see cref="EntryDoesNotExist"/>
         /// </summary>
-        /// <param name="Info">Info about the object serialized</param>
-        /// <param name="Context">Context about the source and destination of the serialized info</param>
-        public EntryDoesNotExist(SerializationInfo Info, StreamingContext Context) : base(Info, Context)
+        /// <param name="aInfo">Info about the object serialized</param>
+        /// <param name="aContext">Context about the source and destination of the serialized info</param>
+        public EntryDoesNotExist(SerializationInfo aInfo, StreamingContext aContext) : base(aInfo, aContext)
         { }
 
         #endregion Constructors

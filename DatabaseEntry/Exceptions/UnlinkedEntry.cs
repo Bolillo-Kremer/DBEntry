@@ -18,33 +18,33 @@ namespace DatabaseEntry.Exceptions
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        public UnlinkedEntry(string Message) : base(Message)
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        public UnlinkedEntry(string aMessage) : base(aMessage)
         { }
 
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        public UnlinkedEntry(string ContextName, string Message) : base(ContextName, Message)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        public UnlinkedEntry(string aContextName, string aMessage) : base(aContextName, aMessage)
         { }
 
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner <see cref="Exception"/></param>
-        public UnlinkedEntry(string ContextName, string Message, Exception InnerException) : base(ContextName, Message, InnerException)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner <see cref="Exception"/></param>
+        public UnlinkedEntry(string aContextName, string aMessage, Exception aInnerException) : base(aContextName, aMessage, aInnerException)
         { }
 
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner <see cref="Exception"/></param>
-        public UnlinkedEntry(string Message, Exception InnerException) : base(Message, InnerException)
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner <see cref="Exception"/></param>
+        public UnlinkedEntry(string aMessage, Exception aInnerException) : base(aMessage, aInnerException)
         { }
 
         #endregion Constructors

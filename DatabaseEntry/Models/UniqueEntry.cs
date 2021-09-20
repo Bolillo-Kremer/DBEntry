@@ -7,23 +7,26 @@ namespace DatabaseEntry
     /// <summary>
     /// An Entry Type for tables with a primary key
     /// </summary>
-    /// <typeparam name="T">The type of primary key returned from the database</typeparam>
+    /// <typeparam name="IdentityType">The type of primary key returned from the database</typeparam>
     [Serializable]
-    public abstract class UniqueEntry<T> : Entry where T : struct
+    public abstract class UniqueEntry<IdentityType> : Entry where IdentityType : struct
     {
         #region Properties
 
-        protected T? pkValue { get; set; } = null;
+        /// <summary>
+        /// The value of this <see cref="Entry"/>'s primary key
+        /// </summary>
+        protected IdentityType? pkValue { get; set; } = null;
 
         /// <summary>
         /// Value of the primary key
         /// </summary>
-        public T? PKValue => pkValue;
+        public IdentityType? PKValue => pkValue;
 
         /// <summary>
         /// The PrimaryKey name
         /// </summary>
-        protected string PrimaryKey = string.Empty;
+        protected string PKName = string.Empty;
 
         #endregion Properties
 
@@ -31,32 +34,32 @@ namespace DatabaseEntry
 
         /// <summary>
         /// Creates a new instance of <see cref="Entry"/>
-        /// <param name="PrimaryKey">The name of the Primary Key column</param>
+        /// <param name="aPrimaryKeyName">The name of the Primary Key column</param>
         /// </summary>
-        public UniqueEntry(string PrimaryKey) : base() 
+        public UniqueEntry(string aPrimaryKeyName) : base()
         {
-            this.PrimaryKey = PrimaryKey;
+            this.PKName = aPrimaryKeyName;
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="Entry"/>
         /// </summary>
-        /// <param name="PrimaryKey">The name of the Primary Key column</param>
-        /// <param name="TableName">The table to log to in the database</param>
-        public UniqueEntry(string PrimaryKey, string TableName) : base(TableName)
+        /// <param name="aPrimaryKeyName">The name of the Primary Key column</param>
+        /// <param name="aTableName">The table to log to in the database</param>
+        public UniqueEntry(string aPrimaryKeyName, string aTableName) : base(aTableName)
         {
-            this.PrimaryKey = PrimaryKey;
+            this.PKName = aPrimaryKeyName;
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="Entry"/>
         /// </summary>
-        /// <param name="PrimaryKey">The name of the Primary Key column</param>
-        /// <param name="TableName">The table to log to in the database</param>
-        /// <param name="Properties">An array of <see cref="EntryProperty"/>'s</param>
-        public UniqueEntry(string PrimaryKey, string TableName, params EntryProperty[] Properties) : base(TableName, Properties)
+        /// <param name="aPrimaryKeyName">The name of the Primary Key column</param>
+        /// <param name="aTableName">The table to log to in the database</param>
+        /// <param name="aProperties">An array of <see cref="EntryProperty"/>'s</param>
+        public UniqueEntry(string aPrimaryKeyName, string aTableName, params EntryProperty[] aProperties) : base(aTableName, aProperties)
         {
-            this.PrimaryKey = PrimaryKey;
+            this.PKName = aPrimaryKeyName;
         }
 
         #endregion Constructors
@@ -66,12 +69,12 @@ namespace DatabaseEntry
         /// <summary>
         /// Links this <see cref="Entry"/> to an existing <see cref="Entry"/> in the database
         /// </summary>
-        /// <param name="ID">The ID of the <see cref="Entry"/> in the database</param>
-        public void LinkToDatabaseIdentity(T? ID)
+        /// <param name="aPrimaryKeyValue">The ID of the <see cref="Entry"/> in the database</param>
+        public void LinkToDatabaseIdentity(IdentityType? aPrimaryKeyValue)
         {
             if (this.pkValue == null)
             {
-                this.pkValue = ID;
+                this.pkValue = aPrimaryKeyValue;
             }
             else
             {
@@ -87,21 +90,34 @@ namespace DatabaseEntry
             this.pkValue = null;
         }
 
-        protected Entry MatchDatabaseEntry(T? IDValue, string Connection)
+        /// <summary>
+        /// Matches all values from this <see cref="Entry"/> to an Entry in the database
+        /// </summary>
+        /// <param name="aPrimaryKeyValue">The value of the primary key to get <see cref="Entry"/> values from</param>
+        /// <param name="aConnection">Connection to the database</param>
+        /// <param name="aAdditionalProperties">Any additional properties to retireve from the <see cref="Entry"/> in the database</param>
+        /// <returns>An <see cref="Entry"/> with all the row data</returns>
+        protected Entry MatchDatabaseEntry(IdentityType? aPrimaryKeyValue, string aConnection, params EntryProperty[] aAdditionalProperties)
         {
             //Add properties to get from the database
-            Entry AllCols = this.Copy();
-            AllCols.AddProperty(PrimaryKey);
-            AllCols = AllCols.Get(Connection, 1, new EntryProperty(PrimaryKey, IDValue))[0];
+            Entry lAllCols = this.Copy();
+            lAllCols.AddProperty(this.PKName);
 
-            //Populate properties from database
-            this.pkValue = (T)Convert.ChangeType(AllCols["ID"].Value, typeof(T));
-            foreach(EntryProperty aProp in this.Properties)
+            foreach (EntryProperty lProp in aAdditionalProperties)
             {
-                this[aProp.ColumnName].Value = (AllCols[aProp.ColumnName].Value != DBNull.Value) ? (string)AllCols[aProp.ColumnName].Value : null;
+                lAllCols.AddProperty(lProp);
             }
 
-            return AllCols;
+            lAllCols = lAllCols.Get(aConnection, 1, new EntryProperty(this.PKName, aPrimaryKeyValue))[0];
+
+            //Populate properties from database
+            this.pkValue = (IdentityType)Convert.ChangeType(lAllCols[this.PKName].Value, typeof(IdentityType));
+            foreach (EntryProperty aProp in this.Properties)
+            {
+                this[aProp.ColumnName].Value = (lAllCols[aProp.ColumnName].Value != DBNull.Value) ? lAllCols[aProp.ColumnName].Value : null;
+            }
+
+            return lAllCols;
         }
 
         #endregion Methods
@@ -111,13 +127,13 @@ namespace DatabaseEntry
         /// <summary>
         /// Inserts this <see cref="Entry"/> into the database and returns its SCOPE_IDENTITY()
         /// </summary>
-        /// <param name="Connection"></param>
+        /// <param name="aConnection">The connection to the database</param>
         /// <returns>The identity of the newly inserted Entry</returns>
-        public new void Insert(string Connection)
+        public new void Insert(string aConnection)
         {
             if (this.pkValue == null)
             {
-                this.pkValue = new DatabaseConnection(Connection).InsertEntry<T>(this);
+                this.pkValue = new DatabaseConnection(aConnection).InsertEntry<IdentityType>(this);
             }
             else
             {
@@ -126,14 +142,27 @@ namespace DatabaseEntry
         }
 
         /// <summary>
+        /// Inserts this <see cref="Entry"/> and returns a new <see cref="Entry"/> with all of the values the inserted <see cref="Entry"/>
+        /// </summary>
+        /// <param name="aConnection">The connection to the database</param>
+        /// <param name="aAdditionalProperties">Additional properties to insert into the database</param>
+        /// <returns></returns>
+        public Entry InsertAndGetScoped(string aConnection, params EntryProperty[] aAdditionalProperties)
+        {
+            Entry Scoped = new DatabaseConnection(aConnection).InsertEntry(this, new EntryProperty(this.PKName), aAdditionalProperties);
+            this.pkValue = (IdentityType)Convert.ChangeType(Scoped[this.PKName].Value, typeof(IdentityType));
+            return Scoped;
+        }
+
+        /// <summary>
         /// Updates this <see cref="Entry"/>
         /// </summary>
-        /// <param name="Connection">The connection to the database</param>
-        public void Update(string Connection)
+        /// <param name="aConnection">The connection to the database</param>
+        public void Update(string aConnection)
         {
             if (this.pkValue != null)
             {
-                this.Update(Connection, new EntryProperty("ID", this.pkValue, SqlDbType.BigInt));
+                this.Update(aConnection, new EntryProperty(this.PKName, this.pkValue));
             }
             else
             {
@@ -144,12 +173,12 @@ namespace DatabaseEntry
         /// <summary>
         /// Deletes this <see cref="Entry"/> from the database
         /// </summary>
-        /// <param name="Connection">The connection to the database</param>
-        public void Delete(string Connection)
+        /// <param name="aConnection">The connection to the database</param>
+        public void Delete(string aConnection)
         {
             if (this.pkValue != null)
             {
-                this.Delete(Connection, new EntryProperty("ID", this.pkValue, SqlDbType.BigInt));
+                this.Delete(aConnection, new EntryProperty(this.PKName, this.pkValue));
             }
             else
             {

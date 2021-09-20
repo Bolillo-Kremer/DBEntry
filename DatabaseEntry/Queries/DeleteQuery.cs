@@ -2,24 +2,26 @@
 
 namespace DatabaseEntry.Queries
 {
+    /// <summary>
+    /// Creates a DELETE query for an <see cref="Entry"/>
+    /// </summary>
     public class DeleteQuery : Query
     {
         #region Constructors
 
         /// <summary>
-        /// 
+        /// Creates a DELETE query for an <see cref="Entry"/>
         /// </summary>
-        /// <param name="aCommand">The command to build parameters for</param>
         /// <param name="aEntry"></param>
-        /// <param name="WhereProp"></param>
-        public DeleteQuery(Entry aEntry, params EntryProperty[] WhereProp)
+        /// <param name="aSearchProps"></param>
+        public DeleteQuery(Entry aEntry, params EntryProperty[] aSearchProps)
         {
             string Query = $"DELETE FROM {aEntry.TableName} WHERE ";
 
-            foreach (EntryProperty aProp in WhereProp)
+            foreach (EntryProperty aProp in aSearchProps)
             {
                 this.AddParameter(aProp);
-                Query += $"{aProp.ColumnName}=@{aProp.ColumnName}{(WhereProp.Last().Equals(aProp) ? "" : " AND ")}";
+                Query += $"{aProp.ColumnName}=@{aProp.ColumnName}{(aSearchProps.Last().Equals(aProp) ? "" : " AND ")}";
             }
 
             this.command.CommandText = Query;

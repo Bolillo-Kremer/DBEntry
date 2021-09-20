@@ -11,6 +11,9 @@ namespace DatabaseEntry.Exceptions
         #region Properties
 
         private EntryProperty property { get; set; } = null;
+        /// <summary>
+        /// The duplicate property
+        /// </summary>
         public EntryProperty Property { get; set; } = null;
 
         #endregion Properties
@@ -26,134 +29,134 @@ namespace DatabaseEntry.Exceptions
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        public DuplicateEntryProperty(EntryProperty DuplicateProperty): base(MessageBuilder(DuplicateProperty))
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        public DuplicateEntryProperty(EntryProperty aDuplicateProperty): base(MessageBuilder(aDuplicateProperty))
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        public DuplicateEntryProperty(string Message): base(Message)
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        public DuplicateEntryProperty(string aMessage): base(aMessage)
         { }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        public DuplicateEntryProperty(EntryProperty DuplicateProperty, string Message) : base(Message)
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        public DuplicateEntryProperty(EntryProperty aDuplicateProperty, string aMessage) : base(aMessage)
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        public DuplicateEntryProperty(string ContextName, string Message): base(ContextName, Message)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        public DuplicateEntryProperty(string aContextName, string aMessage): base(aContextName, aMessage)
         { }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        public DuplicateEntryProperty(string ContextName, EntryProperty DuplicateProperty) : base(ContextName, MessageBuilder(DuplicateProperty))
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        public DuplicateEntryProperty(string aContextName, EntryProperty aDuplicateProperty) : base(aContextName, MessageBuilder(aDuplicateProperty))
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        public DuplicateEntryProperty(string ContextName, EntryProperty DuplicateProperty, string Message): base(ContextName, Message)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        public DuplicateEntryProperty(string aContextName, EntryProperty aDuplicateProperty, string aMessage): base(aContextName, aMessage)
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner<see cref="Exception"/></param>
-        public DuplicateEntryProperty(string ContextName, string Message, Exception InnerException): base(ContextName, Message, InnerException)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner<see cref="Exception"/></param>
+        public DuplicateEntryProperty(string aContextName, string aMessage, Exception aInnerException): base(aContextName, aMessage, aInnerException)
         { }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner<see cref="Exception"/></param>
-        public DuplicateEntryProperty(string ContextName, EntryProperty DuplicateProperty, string Message, Exception InnerException) : base(ContextName, Message, InnerException)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner<see cref="Exception"/></param>
+        public DuplicateEntryProperty(string aContextName, EntryProperty aDuplicateProperty, string aMessage, Exception aInnerException) : base(aContextName, aMessage, aInnerException)
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        /// <param name="InnerException">The inner<see cref="Exception"/></param>
-        public DuplicateEntryProperty(string ContextName, EntryProperty DuplicateProperty, Exception InnerException) : base(ContextName, MessageBuilder(DuplicateProperty), InnerException)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        /// <param name="aInnerException">The inner<see cref="Exception"/></param>
+        public DuplicateEntryProperty(string aContextName, EntryProperty aDuplicateProperty, Exception aInnerException) : base(aContextName, MessageBuilder(aDuplicateProperty), aInnerException)
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner<see cref="Exception"/></param>
-        public DuplicateEntryProperty(EntryProperty DuplicateProperty, string Message, Exception InnerException) : base(Message, InnerException)
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner<see cref="Exception"/></param>
+        public DuplicateEntryProperty(EntryProperty aDuplicateProperty, string aMessage, Exception aInnerException) : base(aMessage, aInnerException)
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="DuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
-        /// <param name="InnerException">The inner<see cref="Exception"/></param>
-        public DuplicateEntryProperty(EntryProperty DuplicateProperty, Exception InnerException) : base(MessageBuilder(DuplicateProperty), InnerException)
+        /// <param name="aDuplicateProperty">The duplicate <see cref="EntryProperty"/> in an <see cref="Entry"/></param>
+        /// <param name="aInnerException">The inner<see cref="Exception"/></param>
+        public DuplicateEntryProperty(EntryProperty aDuplicateProperty, Exception aInnerException) : base(MessageBuilder(aDuplicateProperty), aInnerException)
         {
-            this.property = DuplicateProperty;
+            this.property = aDuplicateProperty;
         }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="Message"><see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner<see cref="Exception"/></param>
-        public DuplicateEntryProperty(string Message, Exception InnerException): base(Message, InnerException)
+        /// <param name="aMessage"><see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner<see cref="Exception"/></param>
+        public DuplicateEntryProperty(string aMessage, Exception aInnerException): base(aMessage, aInnerException)
         { }
 
         /// <summary>
         /// Creates new <see cref="DuplicateEntryProperty"/>
         /// </summary>
-        /// <param name="Info">Info about the object serialized</param>
-        /// <param name="Context">Context about the source and destination of the serialized info</param>
-        public DuplicateEntryProperty(SerializationInfo Info, StreamingContext Context) : base(Info, Context)
+        /// <param name="aInfo">Info about the object serialized</param>
+        /// <param name="aContext">Context about the source and destination of the serialized info</param>
+        public DuplicateEntryProperty(SerializationInfo aInfo, StreamingContext aContext) : base(aInfo, aContext)
         { }
 
         #endregion Constructors
 
         #region Methods
 
-        private static string MessageBuilder(EntryProperty DuplicateProperty)
+        private static string MessageBuilder(EntryProperty aDuplicateProperty)
         {
-            return $"Cannot add property \"{DuplicateProperty.ColumnName}\" to Entry because Entry because a property named \"{DuplicateProperty.ColumnName}\" already exists";
+            return $"Cannot add property \"{aDuplicateProperty.ColumnName}\" to Entry because Entry because a property named \"{aDuplicateProperty.ColumnName}\" already exists";
         }
 
         #endregion Methods

@@ -29,45 +29,45 @@ namespace DatabaseEntry.Exceptions
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        public BaseException(string Message) : base(Message)
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        public BaseException(string aMessage) : base(aMessage)
         { }
 
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        public BaseException(string ContextName, string Message) : base(Message)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        public BaseException(string aContextName, string aMessage) : base(aMessage)
         {
-            this.context = ContextName;
+            this.context = aContextName;
         }
 
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="ContextName">The Context of the query where this error occured</param>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner <see cref="Exception"/></param>
-        public BaseException(string ContextName, string Message, Exception InnerException) : base(Message, InnerException)
+        /// <param name="aContextName">The Context of the query where this error occured</param>
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner <see cref="Exception"/></param>
+        public BaseException(string aContextName, string aMessage, Exception aInnerException) : base(aMessage, aInnerException)
         {
-            this.context = ContextName;
+            this.context = aContextName;
         }
 
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="Message">An <see cref="Exception"/> message</param>
-        /// <param name="InnerException">The inner <see cref="Exception"/></param>
-        public BaseException(string Message, Exception InnerException) : base(Message, InnerException)
+        /// <param name="aMessage">An <see cref="Exception"/> message</param>
+        /// <param name="aInnerException">The inner <see cref="Exception"/></param>
+        public BaseException(string aMessage, Exception aInnerException) : base(aMessage, aInnerException)
         { }
 
         /// <summary>
         /// Creates a new <see cref="BaseException"/>
         /// </summary>
-        /// <param name="Info">Info about the object serialized</param>
-        /// <param name="Context">Context about the source and destination of the serialized info</param>
-        public BaseException(SerializationInfo Info, StreamingContext Context) : base(Info, Context)
+        /// <param name="aInfo">Info about the object serialized</param>
+        /// <param name="aContext">Context about the source and destination of the serialized info</param>
+        public BaseException(SerializationInfo aInfo, StreamingContext aContext) : base(aInfo, aContext)
         { }
 
         #endregion Constructors

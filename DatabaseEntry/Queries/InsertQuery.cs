@@ -23,44 +23,44 @@ namespace DatabaseEntry.Queries
         /// <summary>
         /// Builds an insert query based on one or multiple <see cref="Entry"/>'s
         /// </summary>
-        /// <param name="Entries">The <see cref="Entry"/>'s to build a query for</param>
-        public InsertQuery(params Entry[] Entries)
+        /// <param name="aEntries">The <see cref="Entry"/>'s to build a query for</param>
+        public InsertQuery(params Entry[] aEntries)
         {
-            CreateQuery(false, Entries);   
+            CreateQuery(false, aEntries);   
         }
 
         /// <summary>
         /// Builds an insert query based on a single <see cref="Entry"/>
         /// </summary>
-        /// <param name="GetScopeIdentity">If true, Query will return the inserted primary key</param>
+        /// <param name="aGetScopeIdentity">If true, Query will return the inserted primary key</param>
         /// <param name="aEntry">The <see cref="Entry"/> to build a query for</param>
-        public InsertQuery(bool GetScopeIdentity, Entry aEntry)
+        public InsertQuery(bool aGetScopeIdentity, Entry aEntry)
         {
-            CreateQuery(GetScopeIdentity, aEntry);
+            CreateQuery(aGetScopeIdentity, aEntry);
         }
 
         /// <summary>
         /// Creates an insert query that selects all the values of the ScopeIdentity
         /// </summary>
         /// <param name="aEntry">The <see cref="Entry"/> to log</param>
-        /// <param name="ScopeIdentity">The primary keys <see cref="EntryProperty"/></param>
-        /// <param name="AdditionalProperties">Other <see cref="EntryProperty"/>'s that are auto-generated</param>
-        public InsertQuery(Entry aEntry, EntryProperty ScopeIdentity, params EntryProperty[] AdditionalProperties)
+        /// <param name="aScopeIdentity">The primary keys <see cref="EntryProperty"/></param>
+        /// <param name="aAdditionalProperties">Other <see cref="EntryProperty"/>'s that are auto-generated</param>
+        public InsertQuery(Entry aEntry, EntryProperty aScopeIdentity, params EntryProperty[] aAdditionalProperties)
         {
             CreateQuery(false, aEntry);
 
             this.returnedEntry = aEntry.BlankCopy();
 
-            this.returnedEntry.AddProperty(ScopeIdentity);
+            this.returnedEntry.AddProperty(aScopeIdentity);
 
-            foreach (EntryProperty Prop in AdditionalProperties)
+            foreach (EntryProperty lProp in aAdditionalProperties)
             {
-                this.returnedEntry.AddProperty(Prop);
+                this.returnedEntry.AddProperty(lProp);
             }
 
-            SelectQuery aQuery = new SelectQuery(this.returnedEntry, 1);
+            SelectQuery lQuery = new SelectQuery(this.returnedEntry, 1);
 
-            this.command.CommandText += aQuery.Command.CommandText + $" WHERE {ScopeIdentity.ColumnName}=SCOPE_IDENTITY();";
+            this.command.CommandText += lQuery.Command.CommandText + $" WHERE {aScopeIdentity.ColumnName}=SCOPE_IDENTITY();";
         }
 
         #endregion Constructors
@@ -70,36 +70,36 @@ namespace DatabaseEntry.Queries
         /// <summary>
         /// Creates an insert query
         /// </summary>
-        /// <param name="GetScopeIdentity"></param>
-        /// <param name="Entries"></param>
-        private void CreateQuery(bool GetScopeIdentity, params Entry[] Entries)
+        /// <param name="aGetScopeIdentity"></param>
+        /// <param name="aEntries"></param>
+        private void CreateQuery(bool aGetScopeIdentity, params Entry[] aEntries)
         {
-            if (Entries.AreSameType(true) && Entries[0].HasTableName(true))
+            if (aEntries.AreSameType(true) && aEntries[0].HasTableName(true))
             {
-                string Query = $"INSERT INTO {Entries[0].TableName} (";
-                string Values = "";
+                string lQuery = $"INSERT INTO {aEntries[0].TableName} (";
+                string lValues = "";
 
-                for (int i = 0; i < Entries.Length; i++)
+                for (int i = 0; i < aEntries.Length; i++)
                 {
-                    Values += "(";
-                    foreach (EntryProperty Prop in Entries[i].Properties)
+                    lValues += "(";
+                    foreach (EntryProperty lProp in aEntries[i].Properties)
                     {
                         if (i == 0)
                         {
                             //Builds Query
-                            Query += Prop.ColumnName + (Prop.Equals(Entries[0].Properties.Last()) ? ") VALUES " : ",");
+                            lQuery += lProp.ColumnName + (lProp.Equals(aEntries[0].Properties.Last()) ? ") VALUES " : ",");
                         }
 
                         //Builds param
-                        string Param = $"{Prop.ColumnName}" + ((i == 0) ? "" : $"{i}");
+                        string lParam = $"{lProp.ColumnName}" + ((i == 0) ? "" : $"{i}");
                         //Builds Values for query
-                        Values += $"@{Param}" + ((Entries[i].Properties.Last().Equals(Prop)) ? "" : ",");
-                        this.AddParameter(Param, Prop.DataType, Prop.Value);
+                        lValues += $"@{lParam}" + ((aEntries[i].Properties.Last().Equals(lProp)) ? "" : ",");
+                        this.AddParameter(lParam, lProp.DataType, lProp.Value);
                     }
-                    Values += ")" + ((i == Entries.Length - 1) ? ";" : ",");
+                    lValues += ")" + ((i == aEntries.Length - 1) ? ";" : ",");
                 }
 
-                this.command.CommandText = Query + Values + (GetScopeIdentity ? " SELECT SCOPE_IDENTITY();" : "");
+                this.command.CommandText = lQuery + lValues + (aGetScopeIdentity ? " SELECT SCOPE_IDENTITY();" : "");
             }
         }
 

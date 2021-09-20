@@ -12,23 +12,23 @@ namespace DatabaseEntry.Extensions
         /// <summary>
         /// Checks to see if two <see cref="Entry"/>'s are equal and have equal values
         /// </summary>
-        /// <param name="Compare">The <see cref="Entry"/>'s to check</param>
-        /// <param name="ThrowError">If set to true, this method will thrown an error if <see cref="Entry"/>'s are not the same type</param>
+        /// <param name="aEntries">The <see cref="Entry"/>'s to compare this <see cref="Entry"/> to</param>
+        /// <param name="aThrowError">If set to true, this method will thrown an error if <see cref="Entry"/>'s are not the same type</param>
         /// <returns>True if equal</returns>
-        public static bool AreEqual(this Entry[] Entries, bool ThrowError = false)
+        public static bool AreEqual(this Entry[] aEntries, bool aThrowError = false)
         {
-            return Entries[0].Equals(Entries, ThrowError);
+            return aEntries[0].Equals(aEntries, aThrowError);
         }
 
         /// <summary>
         /// Checks if two <see cref="Entry"/>'s are the same type without checking values
         /// </summary>
-        /// <param name="Compare">The <see cref="Entry"/>'s to compare to</param>
-        /// <param name="ThrowError">If set to true, this method will thrown an error if <see cref="Entry"/>'s are not the same type</param>
+        /// <param name="aEntries">The <see cref="Entry"/>'s to compare this <see cref="Entry"/> to</param>
+        /// <param name="aThrowError">If set to true, this method will thrown an error if <see cref="Entry"/>'s are not the same type</param>
         /// <returns>True if the same type</returns>
-        public static bool AreSameType(this Entry[] Entries, bool ThrowError = false)
+        public static bool AreSameType(this Entry[] aEntries, bool aThrowError = false)
         {
-            return Entries[0].SameType(Entries, ThrowError);
+            return aEntries[0].SameType(aEntries, aThrowError);
         }
     }
 }

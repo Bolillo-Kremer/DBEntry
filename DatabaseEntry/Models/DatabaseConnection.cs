@@ -1,6 +1,5 @@
-﻿using System;
+﻿using DatabaseEntry.Queries;
 using System.Collections.Generic;
-using DatabaseEntry.Queries;
 using System.Data.SqlClient;
 
 namespace DatabaseEntry
@@ -25,11 +24,10 @@ namespace DatabaseEntry
         /// <summary>
         /// Creates new connection to the logging table
         /// </summary>
-        /// <param name="ConnectionString">Connection string to the database</param>
-        /// <param name="TableName">Table to log the <see cref="Entry"/> to</param>
-        public DatabaseConnection(string ConnectionString)
+        /// <param name="aConnectionString">Connection string to the database</param>
+        public DatabaseConnection(string aConnectionString)
         {
-            this.connectionString = ConnectionString;
+            this.connectionString = aConnectionString;
         }
 
         #endregion Constructors
@@ -51,90 +49,89 @@ namespace DatabaseEntry
         /// Creates an insert query that selects all the values of the ScopeIdentity
         /// </summary>
         /// <param name="aEntry">The <see cref="Entry"/> to log</param>
-        /// <param name="ScopeIdentity">An <see cref="EntryProperty"/> based on the primary key</param>
-        /// <param name="AdditionalProperties">Other <see cref="EntryProperty"/>'s that are auto-generated</param>
+        /// <param name="aScopeIdentity">An <see cref="EntryProperty"/> based on the primary key</param>
+        /// <param name="aAdditionalProperties">Other <see cref="EntryProperty"/>'s that are auto-generated</param>
         /// <returns>The Entry logged with auto-generated sql parameters</returns>
-        public Entry InsertEntry(Entry aEntry, EntryProperty ScopeIdentity, params EntryProperty[] AdditionalProperties)
+        public Entry InsertEntry(Entry aEntry, EntryProperty aScopeIdentity, params EntryProperty[] aAdditionalProperties)
         {
-            InsertQuery EntryQuery = new InsertQuery(aEntry, ScopeIdentity, AdditionalProperties);
-            Entry ReturnEntry = EntryQuery.ReturnedEntry;
+            InsertQuery lEntryQuery = new InsertQuery(aEntry, aScopeIdentity, aAdditionalProperties);
+            Entry lReturnEntry = lEntryQuery.ReturnedEntry;
 
-            EntryQuery.ExecuteReader(this.connectionString, (SqlDataReader aReader) =>
+            lEntryQuery.ExecuteReader(this.connectionString, (SqlDataReader lReader) =>
             {
-                foreach (EntryProperty Prop in ReturnEntry.Properties)
+                foreach (EntryProperty lProp in lReturnEntry.Properties)
                 {
-                    ReturnEntry[Prop.ColumnName].Value = aReader[Prop.ColumnName];
+                    lReturnEntry[lProp.ColumnName].Value = lReader[lProp.ColumnName];
                 }
             });
 
-            return ReturnEntry;
+            return lReturnEntry;
         }
 
         /// <summary>
         /// Logs all <see cref="Entry"/>'s in a given array of <see cref="Entry"/>'s
         /// </summary>
-        /// <param name="Entries">The <see cref="Entry"/>'s to log to the database</param>
+        /// <param name="aEntries">The <see cref="Entry"/>'s to log to the database</param>
         /// <returns>The number of rows inserted into the database</returns>
-        public int InsertEntry(params Entry[] Entries)
+        public int InsertEntry(params Entry[] aEntries)
         {
-            return new InsertQuery(Entries).ExecuteNonQuery(this.connectionString); ;
+            return new InsertQuery(aEntries).ExecuteNonQuery(this.connectionString); ;
         }
 
         /// <summary>
         /// Gets a list of <see cref="Entry"/>'s based on a given template
         /// </summary>
-        /// <param name="Template">An <see cref="Entry"/> with the properties to select</param>
-        /// <param name="Props">The <see cref="EntryProperty"/> to search for</param>
+        /// <param name="aTemplate">An <see cref="Entry"/> with the properties to select</param>
+        /// <param name="aSearchProps">The <see cref="EntryProperty"/> to search for</param>
         /// <returns>A list of <see cref="Entry"/>'s</returns>
-        public Entry[] GetEntries(Entry Template, params EntryProperty[] Props)
+        public Entry[] GetEntries(Entry aTemplate, params EntryProperty[] aSearchProps)
         {
-            return GetEntries(Template, -1, Props);
+            return GetEntries(aTemplate, -1, aSearchProps);
         }
 
         /// <summary>
         /// Gets a list of <see cref="Entry"/>'s based on a given template
         /// </summary>
-        /// <param name="Template">An <see cref="Entry"/> with the properties to select</param>
-        /// <param name="Props">A <see cref="EntryProperty"/> array where the the value is the value to search for</param>
-        /// <param name="Top">The number of rows to select</param>
+        /// <param name="aTemplate">An <see cref="Entry"/> with the properties to select</param>
+        /// <param name="aSearchProps">A <see cref="EntryProperty"/> array where the the value is the value to search for</param>
+        /// <param name="aTop">The number of rows to select</param>
         /// <returns>A list of <see cref="Entry"/>'s</returns>
-        public Entry[] GetEntries(Entry Template, int Top = -1, params EntryProperty[] Props)
+        public Entry[] GetEntries(Entry aTemplate, int aTop = -1, params EntryProperty[] aSearchProps)
         {
-            List<Entry> Entries = new List<Entry>();
-            var test = new SelectQuery(Template, Top, Props);
-            new SelectQuery(Template, Top, Props).ExecuteReader(this.connectionString, (SqlDataReader aReader) =>
+            List<Entry> lEntries = new List<Entry>();
+            new SelectQuery(aTemplate, aTop, aSearchProps).ExecuteReader(this.connectionString, (SqlDataReader lReader) =>
             {
-                Entry RowEntry = Template.BlankCopy();
+                Entry lRowEntry = aTemplate.BlankCopy();
 
-                foreach (EntryProperty Prop in RowEntry.Properties)
+                foreach (EntryProperty Prop in lRowEntry.Properties)
                 {
-                    RowEntry[Prop.ColumnName].Value = aReader[Prop.ColumnName];
+                    lRowEntry[Prop.ColumnName].Value = lReader[Prop.ColumnName];
                 }
 
-                Entries.Add(RowEntry);
+                lEntries.Add(lRowEntry);
             });
 
-            return Entries.ToArray();
+            return lEntries.ToArray();
         }
 
         /// <summary>
         /// Updates a given <see cref="Entry"/>
         /// </summary>
         /// <param name="aEntry">The <see cref="Entry"/> to update</param>
-        /// <param name="Props">The properties to search for when deleting</param>
-        public void UpdateEntry(Entry aEntry, params EntryProperty[] Props)
+        /// <param name="aSearchProps">The properties to search for when deleting</param>
+        public void UpdateEntry(Entry aEntry, params EntryProperty[] aSearchProps)
         {
-            new UpdateQuery(aEntry, Props).ExecuteNonQuery(this.connectionString);
+            new UpdateQuery(aEntry, aSearchProps).ExecuteNonQuery(this.connectionString);
         }
 
         /// <summary>
         /// Deletes a given <see cref="Entry"/>
         /// </summary>
         /// <param name="aEntry">The <see cref="Entry"/> to delete</param>
-        /// <param name="Props">The properties to search for when deleting</param>
-        public void DeleteEntry(Entry aEntry, params EntryProperty[] Props)
+        /// <param name="aSearchProps">The properties to search for when deleting</param>
+        public void DeleteEntry(Entry aEntry, params EntryProperty[] aSearchProps)
         {
-            new DeleteQuery(aEntry, Props).ExecuteNonQuery(this.connectionString);
+            new DeleteQuery(aEntry, aSearchProps).ExecuteNonQuery(this.connectionString);
         }
 
         #endregion Database Methods

@@ -2,60 +2,65 @@
 
 namespace DatabaseEntry.Queries
 {
+    /// <summary>
+    /// Creates a SELECT query based on an <see cref="Entry"/>
+    /// </summary>
     public class SelectQuery : Query
     {
         #region Constructors
         /// <summary>
         /// Creates a SELECT query based on the properties of a given <see cref="Entry"/>
         /// </summary>
-        /// <param name="Template">An <see cref="Entry"/> with all of the properties to select</param>
-        /// <param name="Top">The number of rows to select</param>
-        public SelectQuery(Entry Template, int Top=-1)
+        /// <param name="aTemplate">An <see cref="Entry"/> with all of the properties to select</param>
+        /// <param name="aTop">The number of rows to select</param>
+        public SelectQuery(Entry aTemplate, int aTop=-1)
         {
-            BuildQuery(Template, Top);
+            BuildQuery(aTemplate, aTop);
         }
 
         /// <summary>
         /// Creates a SELECT query based on the properties of a given <see cref="Entry"/>
         /// </summary>
-        /// <param name="Template">An <see cref="Entry"/> with all of the properties to select</param>
-        /// <param name="Top">The number of rows to select</param>
-        public SelectQuery(Entry Template, int Top=-1, params EntryProperty[] Props)
+        /// <param name="aTemplate">An <see cref="Entry"/> with all of the properties to select</param>
+        /// <param name="aTop">The number of rows to select</param>
+        /// <param name="aSearchProps">The properties to search for when selecting</param>
+        public SelectQuery(Entry aTemplate, int aTop=-1, params EntryProperty[] aSearchProps)
         {
-            BuildQuery(Template, Top, Props);
+            BuildQuery(aTemplate, aTop, aSearchProps);
         }
 
         /// <summary>
         /// Creates a SELECT query based on the properties of a given <see cref="Entry"/>
         /// </summary>
-        /// <param name="Template">An <see cref="Entry"/> with all of the properties to select</param>
-        public SelectQuery(Entry Template, params EntryProperty[] Props)
+        /// <param name="aTemplate">An <see cref="Entry"/> with all of the properties to select</param>
+        /// <param name="aSearchProps">The properties to search for when selecting</param>
+        public SelectQuery(Entry aTemplate, params EntryProperty[] aSearchProps)
         {
-            BuildQuery(Template, -1, Props);
+            BuildQuery(aTemplate, -1, aSearchProps);
         }
 
         #endregion Constructors
 
         #region Methods
 
-        private void BuildQuery(Entry Template, int Top = -1, params EntryProperty[] Props)
+        private void BuildQuery(Entry aTemplate, int aTop = -1, params EntryProperty[] aSearchProps)
         {
-            if (Template.HasTableName(true))
+            if (aTemplate.HasTableName(true))
             {
-                string Query = "SELECT " + (Top > 0 ? $"TOP({Top}) " : "");
-                foreach (string Col in Template.PropertyNames)
+                string lQuery = "SELECT " + (aTop > 0 ? $"TOP({aTop}) " : "");
+                foreach (string lCol in aTemplate.PropertyNames)
                 {
-                    Query += Col + (Col.Equals(Template.PropertyNames.Last()) ? "" : ",");
+                    lQuery += lCol + (lCol.Equals(aTemplate.PropertyNames.Last()) ? "" : ",");
                 }
 
-                Query += $" FROM {Template.TableName}" + (Props.Length > 0 ? " WHERE " : "");
+                lQuery += $" FROM {aTemplate.TableName}" + (aSearchProps.Length > 0 ? " WHERE " : "");
 
-                foreach (EntryProperty aProp in Props)
+                foreach (EntryProperty lProp in aSearchProps)
                 {
-                    Query += $"{aProp.ColumnName}=@{aProp.ColumnName}" + (aProp.Equals(Props.Last()) ? "" : " AND ");
-                    this.AddParameter(aProp);
+                    lQuery += $"{lProp.ColumnName}=@{lProp.ColumnName}" + (lProp.Equals(aSearchProps.Last()) ? "" : " AND ");
+                    this.AddParameter(lProp);
                 }
-                this.command.CommandText = Query;
+                this.command.CommandText = lQuery;
             }
         }
 
