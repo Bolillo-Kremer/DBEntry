@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DatabaseEntry</id>
-    <version>1.0.0.21</version>
+    <version>$version$</version>
     <title>Database Entry</title>
     <authors>Bolillo Kremer</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -15,7 +15,4 @@ Automatically generates T-SQL for models.</description>
     <copyright>$copyright$</copyright>
     <tags>Database SQL</tags>
   </metadata>
-  <files>
-    <file src="bin\**" target="lib\netstandard2.0"/>
-  </files>
 </package>

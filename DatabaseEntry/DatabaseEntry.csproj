@@ -2,15 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>BolilloKremer</Authors>
+    <Authors>Bolillo Kremer</Authors>
     <PackageProjectUrl>https://github.com/Bolillo-Kremer/DBEntry</PackageProjectUrl>
     <Description>Provides base types for creating models linked to a database.
 Automatically generates T-SQL for models.</Description>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>DatabaseEntry</PackageId>
     <AssemblyName>DatabaseEntry</AssemblyName>
     <RootNamespace>DatabaseEntry</RootNamespace>
-    <Version>1.0.0.2</Version>
+    <Version>1.0.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
